@@ -9,6 +9,7 @@ app.get('/', (req, res) => {
 })
 
 io.sockets.on('connection', (socket, pseudo) => {
+
   socket.on('nouveau_client', (pseudo) => {
     pseudo = ent.encode(pseudo)
     socket.pseudo = pseudo
@@ -18,6 +19,7 @@ io.sockets.on('connection', (socket, pseudo) => {
     message = ent.encode(message)
     socket.broadcast.emit('message', {pseudo: socket.pseudo, message: message})
   })
+
 })
 
-server.listen(6789)
+server.listen(8080)
