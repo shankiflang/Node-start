@@ -1,7 +1,9 @@
-let app = require('express')(),
-    server = require('http').createServer(app),
-    io = require('socket.io').listen(server),
-    ent = require('ent')
+let app = require("express")(),
+    server = require("http").createServer(app),
+    io = require("socket.io").listen(server),
+    ent = require("ent")
+
+
 
 
 app.get('/', (req, res) => {
@@ -22,4 +24,4 @@ io.sockets.on('connection', (socket, pseudo) => {
 
 })
 
-server.listen(8080)
+server.listen(6789)
