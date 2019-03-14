@@ -101,7 +101,7 @@ let app = __webpack_require__(/*! express */ "express")(),
     server = __webpack_require__(/*! http */ "http").createServer(app),
     Routes = __webpack_require__(/*! ./routes */ "./src/routes.js");
 
-app.use('/users', Routes);
+app.use('/', Routes);
 server.listen(8080, () => console.log('[Express] is running on port 8080'));
 
 /***/ }),
@@ -120,7 +120,8 @@ let userSchema = __webpack_require__(/*! ./schemas */ "./src/schemas.js");
 const url = 'mongodb://localhost:27017/Slatsh';
 const options = {
   promiseLibrary: Promise,
-  useNewUrlParser: true
+  useNewUrlParser: true,
+  useCreateIndex: true
 };
 mongoose.connect(url, options);
 mongoose.connection.on('connected', () => console.log('[MongoDB] is running on port 27017'));
@@ -145,11 +146,6 @@ const Router = express.Router();
 Router.get('/users', async (req, res) => {
   try {
     const users = await User.find().exec();
-
-    if (!users) {
-      return res.json(false);
-    }
-
     return res.json(users);
   } catch (e) {
     console.log(e);
@@ -186,7 +182,7 @@ module.exports = userSchema;
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\Program\laragon\www\Nodestart\src/index.js */"./src/index.js");
+module.exports = __webpack_require__(/*! D:\ProgramFiles\laragon\www\Nodestart\src/index.js */"./src/index.js");
 
 
 /***/ }),

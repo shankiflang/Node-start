@@ -8,15 +8,12 @@ Router.get('/users', async (req, res) => {
   try {
 
     const users = await User.find().exec()
-
-    if(!users){
-      return res.json(false)
-    }
-
     return res.json(users)
 
-  }catch (e) {
+  } catch (e) {
+
     console.log(e)
+
   }
 })
 

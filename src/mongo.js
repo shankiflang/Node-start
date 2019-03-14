@@ -5,6 +5,7 @@ const url = 'mongodb://localhost:27017/Slatsh'
 const options = {
   promiseLibrary: Promise,
   useNewUrlParser: true,
+  useCreateIndex: true,
 }
 
 mongoose.connect(url, options)

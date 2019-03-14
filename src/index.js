@@ -4,7 +4,7 @@ let app = require("express")(),
     Routes = require("./routes")
 
 
-app.use('/users', Routes)
+app.use('/', Routes)
 
 server.listen(8080, () =>
   console.log('[Express] is running on port 8080')
