@@ -92,33 +92,90 @@ module.exports =
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! http */ "http");
-/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(http__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! fs */ "fs");
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var socket_io__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! socket.io */ "socket.io");
-/* harmony import */ var socket_io__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(socket_io__WEBPACK_IMPORTED_MODULE_2__);
+__webpack_require__(/*! ./mongo */ "./src/mongo.js");
 
+let app = __webpack_require__(/*! express */ "express")(),
+    server = __webpack_require__(/*! http */ "http").createServer(app),
+    Routes = __webpack_require__(/*! ./routes */ "./src/routes.js");
 
+app.use('/users', Routes);
+server.listen(8080, () => console.log('[Express] is running on port 8080'));
 
-let server = http__WEBPACK_IMPORTED_MODULE_0___default.a.createServer((req, res) => {
-  fs__WEBPACK_IMPORTED_MODULE_1___default.a.readFile('./index.html', 'utf-8', (error, content) => {
-    res.writeHead(200, {
-      "Content-Type": "text/html"
-    });
-    res.end(content);
-  });
+/***/ }),
+
+/***/ "./src/mongo.js":
+/*!**********************!*\
+  !*** ./src/mongo.js ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+let mongoose = __webpack_require__(/*! mongoose */ "mongoose");
+
+let userSchema = __webpack_require__(/*! ./schemas */ "./src/schemas.js");
+
+const url = 'mongodb://localhost:27017/Slatsh';
+const options = {
+  promiseLibrary: Promise,
+  useNewUrlParser: true
+};
+mongoose.connect(url, options);
+mongoose.connection.on('connected', () => console.log('[MongoDB] is running on port 27017'));
+mongoose.connection.on('disconnected', () => console.warn('[MongoDB] is not connected'));
+mongoose.model('users', userSchema);
+
+/***/ }),
+
+/***/ "./src/routes.js":
+/*!***********************!*\
+  !*** ./src/routes.js ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+let express = __webpack_require__(/*! express */ "express");
+
+let mongoose = __webpack_require__(/*! mongoose */ "mongoose");
+
+const User = mongoose.model('users');
+const Router = express.Router();
+Router.get('/users', async (req, res) => {
+  try {
+    const users = await User.find().exec();
+
+    if (!users) {
+      return res.json(false);
+    }
+
+    return res.json(users);
+  } catch (e) {
+    console.log(e);
+  }
 });
-let sock = socket_io__WEBPACK_IMPORTED_MODULE_2___default.a.listen(server);
-sock.sockets.on('connection', socket => {
-  console.log('Un client est connecté !');
+module.exports = Router;
+
+/***/ }),
+
+/***/ "./src/schemas.js":
+/*!************************!*\
+  !*** ./src/schemas.js ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+let mongoose = __webpack_require__(/*! mongoose */ "mongoose");
+
+const userSchema = new mongoose.Schema({
+  email: {
+    type: String,
+    unique: true
+  },
+  password: String
 });
-server.listen(6789);
+module.exports = userSchema;
 
 /***/ }),
 
@@ -129,19 +186,19 @@ server.listen(6789);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\ProgramFiles\laragon\www\node\src/index.js */"./src/index.js");
+module.exports = __webpack_require__(/*! D:\Program\laragon\www\Nodestart\src/index.js */"./src/index.js");
 
 
 /***/ }),
 
-/***/ "fs":
-/*!*********************!*\
-  !*** external "fs" ***!
-  \*********************/
+/***/ "express":
+/*!**************************!*\
+  !*** external "express" ***!
+  \**************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = require("fs");
+module.exports = require("express");
 
 /***/ }),
 
@@ -156,14 +213,14 @@ module.exports = require("http");
 
 /***/ }),
 
-/***/ "socket.io":
-/*!****************************!*\
-  !*** external "socket.io" ***!
-  \****************************/
+/***/ "mongoose":
+/*!***************************!*\
+  !*** external "mongoose" ***!
+  \***************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = require("socket.io");
+module.exports = require("mongoose");
 
 /***/ })
 
