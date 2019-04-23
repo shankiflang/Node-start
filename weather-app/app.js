@@ -1,13 +1,13 @@
 const geocode = require('./utils/geocode')
 const forecast = require('./utils/forecast')
 
-geocode("Paris", (err, res) => {
+geocode("Paris", (err, { latitude, longitude }) => {
     if (err) return console.log('Erreur: ', err)
 
-    forecast(res.latitude, res.longitude, (err, res) => {
+    forecast(latitude, longitude, (err, { summary, temperature }) => {
         if (err) return console.log('Erreur: ', err)
         
-        console.log(res.summary, res.temperature)
+        console.log(summary, temperature)
     })
 })
 
